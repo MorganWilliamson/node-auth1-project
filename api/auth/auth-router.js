@@ -6,8 +6,34 @@ const bcrypt = require('bcryptjs');
 
 /// AUTH ENDPOINTS ///
 
-// register
+// New user registration.
+router.post('/register', async (req, res) => {
+    console.log('Attempting to register.');
+    try {
+        const hash = bcrypt.hashSync(req.body.password, 10);
+        const newUser = await User.add({ username: req.body.username, password: hash });
+        res.status(201).json(newUser);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
 
-// login
+// Existing user login. 
+router.post('/login', async (req, res) => {
+    console.log('Attempting to sign in.');
+    try {
+        const verify = bcrypt.compareSync(req.body.password, req.userData.password);
+        if (verify) {
+            req.session.user = req.userData;
+            res.json(`Welcome back, ${req.userData.username}`); // "Logged in" message
+        } else {
+            res.status(401).json({ message: "You shall not pass!" }); // Requested message
+        }
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// Come back and add a logout endpoint.
 
 module.exports = router;
