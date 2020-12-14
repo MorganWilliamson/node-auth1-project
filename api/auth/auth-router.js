@@ -1,13 +1,13 @@
 const express = require('express');
 const User = require('../users/users-model');
 const router = express.Router();
-
 const bcrypt = require('bcryptjs');
+const middleware = require('../middlewares/middleware');
+
 
 /// AUTH ENDPOINTS ///
-
 // New user registration.
-router.post('/register', async (req, res) => {
+router.post('/register', middleware.checkPayload, middleware.checkUsernameUnique, async (req, res) => {
     console.log('Attempting to register.');
     try {
         const hash = bcrypt.hashSync(req.body.password, 10);
@@ -19,7 +19,7 @@ router.post('/register', async (req, res) => {
 });
 
 // Existing user login. 
-router.post('/login', async (req, res) => {
+router.post('/login', middleware.checkPayload, middleware.checkUsernameExists, async (req, res) => {
     console.log('Attempting to sign in.');
     try {
         const verify = bcrypt.compareSync(req.body.password, req.userData.password);
