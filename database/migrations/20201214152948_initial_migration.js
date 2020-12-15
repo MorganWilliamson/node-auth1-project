@@ -3,12 +3,12 @@ exports.up = function(knex) {
   return knex.schema
     .createTable('userInfo', tbl => {
         tbl.increments();
-        tbl.string('name', 128).notNullable();
+        tbl.string('name', 128);
     })
     .createTable('userCreds', tbl => {
         tbl.increments();
-        tbl.string('username', 128).notNullable().unique().index();
-        tbl.string('password', 256).notnullable();
+        tbl.string('username', 128).unique().index();
+        tbl.string('password', 256);
         tbl.integer('user')
             .unsigned()
             .references('userInfo.id')

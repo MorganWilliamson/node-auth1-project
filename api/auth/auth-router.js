@@ -6,7 +6,7 @@ const middleware = require('../middlewares/middleware');
 
 
 /// AUTH ENDPOINTS ///
-// New user registration.
+// New user registration. Add back: middleware.checkPayload, middleware.checkUsernameUnique,
 router.post('/register', middleware.checkPayload, middleware.checkUsernameUnique, async (req, res) => {
     console.log('Attempting to register.');
     try {
